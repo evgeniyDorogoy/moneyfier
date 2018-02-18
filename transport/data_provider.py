@@ -42,10 +42,3 @@ class DropBoxDataProvider(DataProviderBase):
     def get_files(self) -> None:
         for file in self.get_list_of_objects(path=dpc.source_folder):
             self.dbx.files_download_to_file(os.path.join(dpc.destination_folder, file.filename), file.filepath)
-
-if __name__ == '__main__':
-    provider = DropBoxDataProvider()
-    # print(provider.smoke())
-    # print(provider.api_smoke())
-    # print(provider.get_list_of_objects(path=dpc.source_folder))
-    # print(provider.get_files())
