@@ -1,7 +1,6 @@
 import os
 import dropbox
 import requests
-from requests.exceptions import RequestException
 from collections import namedtuple
 
 from config import DropBoxConfig
@@ -18,9 +17,7 @@ class DataProviderBase:
             raise ValueError('You have to specify URL for smoke testing')
 
         r = requests.get(self.smoke_url)
-
-        if not r.status_code == 200:
-            raise RequestException('\n\nStatus code is {}\nStatus message is {}'.format(r.status_code, r.reason))
+        r.raise_for_status()
 
     def api_smoke(self):
         raise NotImplementedError
