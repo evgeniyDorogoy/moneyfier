@@ -2,6 +2,7 @@ import os
 import dropbox
 import requests
 from requests.exceptions import RequestException
+from collections import namedtuple
 
 from config import DropBoxConfig
 
@@ -36,14 +37,14 @@ class DropBoxDataProvider(DataProviderBase):
         if not self.dbx.files_list_folder('').entries:
             raise Exception('There are no folders in your Dropbox account')
 
-    def get_list_of_objects(self, path='', recursive=False) -> list:
-        return [{el.name: el.path_lower} for el in self.dbx.files_list_folder(path=path, recursive=recursive).entries]
+    def get_list_of_objects(self, path='', recursive=False) -> namedtuple:
+        result = namedtuple('Result', ['filename', 'filepath'])
 
-    def get_files(self):
+        return [result(el.name, el.path_lower) for el in self.dbx.files_list_folder(path=path, recursive=recursive).entries]
+
+    def get_files(self) -> None:
         for file in self.get_list_of_objects(path=dpc.source_folder):
-            self.dbx.files_download_to_file(os.path.join(dpc.destination_folder,
-                                            list(file.keys())[0]),
-                                            list(file.values())[0])
+            self.dbx.files_download_to_file(os.path.join(dpc.destination_folder, file.filename), file.filepath)
 
 if __name__ == '__main__':
     provider = DropBoxDataProvider()
