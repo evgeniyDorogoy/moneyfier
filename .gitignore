@@ -1,0 +1,9 @@
+#IDE related entities
+.idea/
+
+#Project related entities
+config.py
+downloads/
+
+#Other entities
+__pycache__/
