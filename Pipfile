@@ -7,10 +7,10 @@ name = "pypi"
 
 [dev-packages]
 
+pytest = "*"
 
 
 [packages]
 
 requests = "*"
 dropbox = "*"
-pytest = "*"
