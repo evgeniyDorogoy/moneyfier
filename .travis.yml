@@ -4,5 +4,6 @@ python:
 install:
   - pip install pipenv
   - pipenv install --dev
-script: pytest
-
+script:
+  - pipenv run flake8 --max-line-length=120
+  - pytest
