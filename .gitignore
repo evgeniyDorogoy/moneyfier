@@ -2,7 +2,7 @@
 .idea/
 
 #Project related entities
-config.py
+secret.sh
 execute.py
 downloads/
 
