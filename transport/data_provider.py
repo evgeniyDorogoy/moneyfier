@@ -45,6 +45,9 @@ class DropBoxDataProvider(DataProviderBase):
             path=path,
             recursive=recursive).entries]
 
-    def get_files(self) -> None:
+    def get_files(self) -> int:
+        result_count = 0
         for file in self.get_list_of_objects(path=dpc.source_folder):
             self.dbx.files_download_to_file(os.path.join(dpc.destination_folder, file.filename), file.filepatch)
+            result_count += 1
+        return result_count
