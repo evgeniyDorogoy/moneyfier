@@ -4,6 +4,6 @@ from transport.data_provider import DropBoxDataProvider
 
 
 class DropboxResources(HTTPMethodView):
-    async def get(self, *args, **kwargs):
+    def get(self, *args, **kwargs):
         files_got = DropBoxDataProvider().get_files()
         return json({'files_got': files_got})
