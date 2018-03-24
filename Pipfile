@@ -8,7 +8,7 @@ name = "pypi"
 [dev-packages]
 
 pytest = "*"
-flake8 = "*"
+"flake8" = "*"
 
 
 [packages]
@@ -17,3 +17,6 @@ requests = "*"
 dropbox = "*"
 sanic = "*"
 transliterate = "*"
+sqlalchemy = "*"
+"psycopg2" = "*"
+aiopg = "*"

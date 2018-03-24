@@ -4,6 +4,7 @@
 #Project related entities
 secret.sh
 execute.py
+polygon.py
 downloads/
 
 #Other entities
