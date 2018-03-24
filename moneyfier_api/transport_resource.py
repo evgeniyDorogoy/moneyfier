@@ -1,14 +1,9 @@
-import datetime
-
-from sanic.views import HTTPMethodView
 from sanic.response import json
-from sqlalchemy.sql.functions import coalesce
-from sqlalchemy import select
+from sanic.views import HTTPMethodView
 
 from database.helper import synchronic_engine, asynchronic_engine
 from database.models import Transactions
 from processor.mapper import CSVToDBMapper
-from processor.parser import ExportFileParser
 from transport.data_provider import DropBoxDataProvider
 
 
