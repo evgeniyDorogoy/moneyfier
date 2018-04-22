@@ -44,6 +44,3 @@ class GetSumByCategories(HTTPMethodView):
                 else:
                     accumulator['credit'][row[0]] = row[1]
         return json(accumulator)
-
-
-
