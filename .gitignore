@@ -3,6 +3,7 @@
 
 #Project related entities
 secret.sh
+run_ci.sh
 execute.py
 polygon.py
 downloads/

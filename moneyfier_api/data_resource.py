@@ -11,7 +11,7 @@ class UpdateDatabaseWithLastData(HTTPMethodView):
     def post(self, request):
         with synchronic_engine().connect() as conn:
             values_for_insert = CSVToDBMapper().execute()
-            conn.execute(Transactions.__table__.insert().values(CSVToDBMapper().execute()))
+            conn.execute(Transactions.__table__.insert().values(values_for_insert))
             return json({'total_number_of_inserted_values': len(values_for_insert)})
 
 

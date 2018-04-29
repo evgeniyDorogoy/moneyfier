@@ -43,7 +43,7 @@ class DatabaseConfig:
         self.db_port = os.environ.get('DB_PORT', '5423')
         self.db_user = os.environ.get('DB_USER')
         self.db_password = os.environ.get('DB_PASSWORD')
-        self.db_name = os.environ.get('DB_NAME')
+        self.db_name = os.environ.get('DB_NAME', 'postgres')
 
     @property
     def database_host(self):
