@@ -36,6 +36,29 @@ class DropBoxConfig:
         self.dst_folder = destination_folder
 
 
+class TelegramConfig:
+
+    def __init__(self):
+        self.bt_tkn = os.environ.get('BOT_TOKEN')
+        self.qry_interval = os.environ.get('QUERY_INTERVAL', 15)
+
+    @property
+    def bot_token(self):
+        return self.bt_tkn
+
+    @bot_token.setter
+    def bot_token(self, bt_tkn):
+        self.bt_tkn = bt_tkn
+
+    @property
+    def query_interval(self):
+        return self.qry_interval
+
+    @query_interval.setter
+    def query_interval(self, qry_interval):
+        self.qry_interval = qry_interval
+
+
 class DatabaseConfig:
 
     def __init__(self):
@@ -43,7 +66,7 @@ class DatabaseConfig:
         self.db_port = os.environ.get('DB_PORT', '5423')
         self.db_user = os.environ.get('DB_USER')
         self.db_password = os.environ.get('DB_PASSWORD')
-        self.db_name = os.environ.get('DB_NAME')
+        self.db_name = os.environ.get('DB_NAME', 'postgres')
 
     @property
     def database_host(self):
