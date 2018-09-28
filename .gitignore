@@ -6,8 +6,9 @@ secret.sh
 run_ci.sh
 execute.py
 polygon.py
-downloads/
+downloads/*
 
 #Other entities
 __pycache__/
 tests/.pytest_cache/
+.venv

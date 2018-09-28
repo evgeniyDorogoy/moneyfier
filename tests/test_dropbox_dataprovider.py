@@ -7,9 +7,10 @@ from transport.data_provider import DropBoxDataProvider
 
 @patch('transport.data_provider.dropbox')
 class TestDropboxDataProvider:
-
-    @patch('transport.data_provider.DataProviderBase.make_get_request',
-           new=Mock(return_value=Mock(status_code=200, text='Ok')))
+    @patch(
+        'transport.data_provider.DataProviderBase.make_get_request',
+        new=Mock(return_value=Mock(status_code=200, text='Ok')),
+    )
     def test_smoke_positive(self, *args, **kwargs):
         result = DropBoxDataProvider().smoke()
         assert result[0] == 200

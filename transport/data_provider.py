@@ -41,9 +41,9 @@ class DropBoxDataProvider(DataProviderBase):
 
     def get_list_of_objects(self, path='', recursive=False) -> list:
         result = namedtuple('Result', ['filename', 'filepatch'])
-        return [result(el.name, el.path_lower) for el in self.dbx.files_list_folder(
-            path=path,
-            recursive=recursive).entries]
+        return [
+            result(el.name, el.path_lower) for el in self.dbx.files_list_folder(path=path, recursive=recursive).entries
+        ]
 
     def get_files(self) -> int:
         result_count = 0

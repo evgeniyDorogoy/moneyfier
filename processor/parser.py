@@ -4,7 +4,6 @@ import transliterate
 
 
 class ExportFileParser:
-
     def __init__(self):
         self.target_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'downloads')
 

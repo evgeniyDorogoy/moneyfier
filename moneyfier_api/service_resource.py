@@ -2,18 +2,10 @@ from sanic.exceptions import abort
 from sanic.response import json
 from sanic.views import HTTPMethodView
 
-from database.helper import (
-    create_database,
-    drop_database,
-    create_tables,
-    drop_tables,
-    CreationFail,
-    DropFail
-)
+from database.helper import create_database, drop_database, create_tables, drop_tables, CreationFail, DropFail
 
 
 class DatabaseProcessorBase(HTTPMethodView):
-
     @staticmethod
     def db_lifecycle_response_handler(lifecycle_function):
         existing_databases = []
@@ -26,7 +18,6 @@ class DatabaseProcessorBase(HTTPMethodView):
 
 
 class DatabaseProcessor(DatabaseProcessorBase):
-
     def post(self, *args):
         return self.db_lifecycle_response_handler(create_database)
 
@@ -35,7 +26,6 @@ class DatabaseProcessor(DatabaseProcessorBase):
 
 
 class TableProcessor(HTTPMethodView):
-
     def post(self, request):
         created_tables = create_tables()
         return json({'created_tables': created_tables})

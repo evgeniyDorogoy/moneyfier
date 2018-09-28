@@ -13,18 +13,21 @@ def make_db_url(db_name: str) -> str:
     db_conf = DatabaseConfig()
     if db_name:
         db_conf.database_name = db_name
-    return 'postgresql://{db_user}:{db_password}@{db_host}/{db_name}'.format(db_user=db_conf.database_user,
-                                                                             db_password=db_conf.database_password,
-                                                                             db_host=db_conf.db_host,
-                                                                             db_name=db_conf.database_name)
+    return 'postgresql://{db_user}:{db_password}@{db_host}/{db_name}'.format(
+        db_user=db_conf.database_user,
+        db_password=db_conf.database_password,
+        db_host=db_conf.db_host,
+        db_name=db_conf.database_name,
+    )
 
 
-async def asynchronic_engine(db_name: str=None) -> Any:
+async def asynchronic_engine(db_name: str = None) -> Any:
     from aiopg.sa import create_engine
+
     return await create_engine(make_db_url(db_name))
 
 
-def synchronic_engine(db_name: str=None) -> Any:
+def synchronic_engine(db_name: str = None) -> Any:
     """
     Main use case of this function - serve different database-related routines,
     such as database/tables creation, modification and deletion.
@@ -33,10 +36,11 @@ def synchronic_engine(db_name: str=None) -> Any:
 
     """
     from sqlalchemy import create_engine
+
     return create_engine(make_db_url(db_name), isolation_level='AUTOCOMMIT')
 
 
-def get_synchronic_connection(db_name: str=None) -> Any:
+def get_synchronic_connection(db_name: str = None) -> Any:
     engine = synchronic_engine(db_name)
     return engine.connect()
 
@@ -58,15 +62,14 @@ def database_lifecycle_helper(sql: str, expn: TypeVar(Exception)):
             sc.execute(sql + ' {}'.format(db_conf.db_name))
         except Exception as e:
             raise expn(e)
-        return sc.execute('SELECT datname '
-                          'FROM pg_database '
-                          'WHERE datistemplate = false ')
+        return sc.execute('SELECT datname ' 'FROM pg_database ' 'WHERE datistemplate = false ')
 
 
 def get_model_classes() -> list:
     Clsmember = namedtuple('Clsmember', ['cls_name', 'cls_def'])
-    clsmembers = [Clsmember(member[0], member[1]) for member in inspect.getmembers(sys.modules[models.__name__],
-                                                                                   inspect.isclass)]
+    clsmembers = [
+        Clsmember(member[0], member[1]) for member in inspect.getmembers(sys.modules[models.__name__], inspect.isclass)
+    ]
 
     accumulator = []
     for el in clsmembers:
