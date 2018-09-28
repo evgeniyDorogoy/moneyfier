@@ -4,7 +4,6 @@ from processor.parser import ExportFileParser
 
 
 class CSVToDBMapper:
-
     def execute(self) -> list:
         data = ExportFileParser().parse()
         return self.map(data)
@@ -23,7 +22,7 @@ class CSVToDBMapper:
                 'converted_amount': float(el.get('converted amount').lstrip('-').replace(',', '')),
                 'converted_currency': el.get('currency'),
                 'description': el.get('description'),
-                'is_debet': float(el.get('amount').replace(',', '')) > 0
+                'is_debet': float(el.get('amount').replace(',', '')) > 0,
             }
             accumulator.append(result)
         return accumulator

@@ -2,7 +2,6 @@ import os
 
 
 class DropBoxConfig:
-
     def __init__(self):
         self.acs_token = os.environ.get('ACS_TOKEN')
         self.src_folder = '/monefysource'
@@ -37,7 +36,6 @@ class DropBoxConfig:
 
 
 class TelegramConfig:
-
     def __init__(self):
         self.bt_tkn = os.environ.get('BOT_TOKEN')
         self.qry_interval = os.environ.get('QUERY_INTERVAL', 15)
@@ -60,7 +58,6 @@ class TelegramConfig:
 
 
 class DatabaseConfig:
-
     def __init__(self):
         self.db_host = os.environ.get('DB_HOST', 'localhost')
         self.db_port = os.environ.get('DB_PORT', '5423')
