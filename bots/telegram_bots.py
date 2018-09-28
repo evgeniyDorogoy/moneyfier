@@ -1,7 +1,14 @@
+import logging
+
 from telegram import ParseMode
 from telegram.ext import CommandHandler, Updater
 
 from config import TelegramConfig
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
 
 def start(bot, update):
