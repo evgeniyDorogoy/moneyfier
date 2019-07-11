@@ -47,7 +47,7 @@ class MonobankStatementsMapper:
             result = {
                 'transaction_date': datetime.fromtimestamp(el.get('time')).date(),
                 'account': self.account,
-                'category': [i.get('irs_description') for i in mcc_map_results if int(i.get('mcc')) == el.get('mcc')][0],
+                'category': self._cathegory_mapper(el, mcc_map_results),
                 'amount': float(abs(el.get('amount'))) / 100,
                 'currency': el.get('currencyCode'),
                 'converted_amount': float(abs(el.get('amount'))) / 100,
@@ -62,3 +62,10 @@ class MonobankStatementsMapper:
         path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static/mcc_codes.json')
         with open(path) as outfile:
             return json.load(outfile)
+
+    @staticmethod
+    def _cathegory_mapper(el, mcc_map_results):
+        result = [i.get('irs_description') for i in mcc_map_results if int(i.get('mcc')) == el.get('mcc')]
+        if not result:
+            return el.get('mcc')
+        return result[0]

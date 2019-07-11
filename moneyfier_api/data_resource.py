@@ -3,7 +3,7 @@ import time
 
 from sanic.response import json
 from sanic.views import HTTPMethodView
-from sqlalchemy import select, func
+from sqlalchemy import select, func, desc
 
 from database.helper import synchronic_engine, asynchronic_engine
 from database.models import Transactions
@@ -55,7 +55,7 @@ class GetSumByCategories(HTTPMethodView):
             query = (
                 select([Transactions.category, func.sum(Transactions.amount).label('amount'), Transactions.is_debet])
                 .group_by(Transactions.category, Transactions.is_debet)
-                .order_by('amount')
+                .order_by(desc('amount'))
             )
             async for row in await conn.execute(query):
                 if row[2]:
