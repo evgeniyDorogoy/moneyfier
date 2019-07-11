@@ -21,7 +21,6 @@ class UpdateDatabaseWithLastMonefyData(HTTPMethodView):
 
 class UpdateDatabaseWithLastMonobankData(HTTPMethodView):
     def get(self, request):
-
         date_to = datetime.datetime.fromtimestamp(time.time())
         date_from = date_to - datetime.timedelta(days=31)
 
@@ -36,6 +35,7 @@ class UpdateDatabaseWithLastMonobankData(HTTPMethodView):
         with synchronic_engine().connect() as conn:
             conn.execute(Transactions.__table__.insert().values(values_for_insert))
             return json({'total_number_of_inserted_values': len(values_for_insert)})
+
 
 class GetAllRecords(HTTPMethodView):
     async def get(self, request):

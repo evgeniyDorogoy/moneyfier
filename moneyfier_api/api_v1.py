@@ -1,5 +1,6 @@
 from moneyfier_api.app import app
-from moneyfier_api.data_resource import GetSumByCategories, UpdateDatabaseWithLastMonefyData, GetAllRecords, UpdateDatabaseWithLastMonobankData
+from moneyfier_api.data_resource import GetSumByCategories, UpdateDatabaseWithLastMonefyData, GetAllRecords, \
+    UpdateDatabaseWithLastMonobankData
 from moneyfier_api.service_resource import DatabaseProcessor, TableProcessor
 from moneyfier_api.transport_resource import DropboxResources
 
