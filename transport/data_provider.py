@@ -1,9 +1,9 @@
 import json
-
 import os
+from collections import namedtuple
+
 import dropbox
 import requests
-from collections import namedtuple
 
 from config import DropBoxConfig
 from transport.data_provider_exception import GetStatementException
@@ -12,7 +12,6 @@ dpc = DropBoxConfig()
 
 
 class DataProviderBase:
-
     smoke_url = None
 
     @staticmethod
@@ -32,7 +31,6 @@ class DataProviderBase:
 
 
 class DropBoxDataProvider(DataProviderBase):
-
     smoke_url = 'https://dropbox.com'
 
     def __init__(self):
@@ -57,7 +55,6 @@ class DropBoxDataProvider(DataProviderBase):
 
 
 class MonobankDataProvider(DataProviderBase):
-
     smoke_url = 'https://api.monobank.ua'
 
     def get_statement(self, date_from, date_to, account, headers):
@@ -66,6 +63,7 @@ class MonobankDataProvider(DataProviderBase):
             headers=headers
         )
         if result.status_code != requests.codes.ok:
-            raise GetStatementException(f'Statements for period from {date_from} to {date_to} for {account} are unreachable now: code: {result.status_code} message: {result.text}')
+            raise GetStatementException(
+                f'Statements for period from {date_from} to {date_to} for '
+                f'{account} are unreachable now: code: {result.status_code} message: {result.text}')
         return json.loads(result.text)
-

@@ -10,8 +10,8 @@ async def get_statistic():
     async with engine.acquire() as conn:
         query = (
             select([Transactions.category, func.sum(Transactions.amount).label('amount'), Transactions.is_debet])
-                .group_by(Transactions.category, Transactions.is_debet)
-                .order_by('amount')
+            .group_by(Transactions.category, Transactions.is_debet)
+            .order_by('amount')
         )
         async for row in await conn.execute(query):
             if row[2]:
