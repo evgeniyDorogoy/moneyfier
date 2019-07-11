@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import time
 
@@ -20,6 +21,40 @@ class UpdateDatabaseWithLastMonefyData(HTTPMethodView):
 
 
 class UpdateDatabaseWithLastMonobankData(HTTPMethodView):
+
+    @staticmethod
+    async def data_update(token, date_from, date_to):
+        """
+        Get data from Mono and upload to DB
+        :param token: Monobank token
+        :param date_from: Start date
+        :param date_to: End date
+        :return: None
+        """
+
+        statements = MonobankDataProvider().get_statement(
+            date_from=int(date_from.timestamp()),
+            date_to=int(date_to.timestamp()),
+            account=0,
+            headers={"x-token": token}
+        )
+
+        values_for_insert = MonobankStatementsMapper(statements, 0).execute()
+        engine = await asynchronic_engine()
+        async with engine.acquire() as conn:
+            await conn.execute(Transactions.__table__.insert().values(values_for_insert))
+
+    async def range_data_update(self, token, date_from, date_to):
+        delta = datetime.timedelta(days=31)
+        start = date_from
+        end = start + delta if start + delta <= date_to else date_to
+        while start < date_to:
+            await self.data_update(token, start, end)
+            start = end
+            end = start + delta if start + delta <= date_to else date_to
+            if start < date_to:
+                await asyncio.sleep(90)
+
     def get(self, request):
         date_to = datetime.datetime.fromtimestamp(time.time())
         date_from = date_to - datetime.timedelta(days=31)
@@ -35,6 +70,20 @@ class UpdateDatabaseWithLastMonobankData(HTTPMethodView):
         with synchronic_engine().connect() as conn:
             conn.execute(Transactions.__table__.insert().values(values_for_insert))
             return json({'total_number_of_inserted_values': len(values_for_insert)})
+
+    def post(self, request):
+        """
+        That method will receive all data for period.
+        :param request:
+        :return: Response
+        """
+        token = request.headers.get('X-Token')
+        data = request.json
+        date_from = datetime.datetime.fromisoformat(data["date_from"])
+        date_to = datetime.datetime.fromisoformat(data.get("date_to")) if data.get(
+            "date_to") else datetime.datetime.fromtimestamp(time.time())
+        asyncio.create_task(self.range_data_update(token, date_from, date_to))
+        return json("Task accepted")
 
 
 class GetAllRecords(HTTPMethodView):
