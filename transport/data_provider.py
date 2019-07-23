@@ -1,4 +1,6 @@
 import json
+
+import aiohttp
 import os
 from collections import namedtuple
 
@@ -6,7 +8,7 @@ import dropbox
 import requests
 
 from config import DropBoxConfig
-from transport.data_provider_exception import GetStatementException
+from transport.data_provider_exception import GetStatementException, MonobankDataProviderException
 
 dpc = DropBoxConfig()
 
@@ -57,13 +59,17 @@ class DropBoxDataProvider(DataProviderBase):
 class MonobankDataProvider(DataProviderBase):
     smoke_url = 'https://api.monobank.ua'
 
-    def get_statement(self, date_from, date_to, account, headers):
-        result = self.make_get_request(
-            url=f'{self.smoke_url}/personal/statement/{account}/{date_from}/{date_to}',
-            headers=headers
-        )
+    def api_smoke(self):
+        result = self.make_get_request(url=self.smoke_url)
         if result.status_code != requests.codes.ok:
-            raise GetStatementException(
-                f'Statements for period from {date_from} to {date_to} for '
-                f'{account} are unreachable now: code: {result.status_code} message: {result.text}')
-        return json.loads(result.text)
+            raise MonobankDataProviderException('Monobank API is unreachable')
+
+    async def get_statement(self, date_from, date_to, account, headers):
+        url = f'{self.smoke_url}/personal/statement/{account}/{date_from}/{date_to}'
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url=url, headers=headers) as response:
+                if response.status != requests.codes.ok:
+                    raise GetStatementException(
+                        f'Statements for period from {date_from} to {date_to} for '
+                        f'{account} are unreachable now: code: {response.status} message: {response.text()}')
+                return await response.json()

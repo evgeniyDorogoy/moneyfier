@@ -9,7 +9,6 @@ name = "pypi"
 
 pytest = "*"
 "flake8" = "*"
-black = "*"
 
 
 [packages]
@@ -24,3 +23,5 @@ aiopg = "*"
 python-telegram-bot = "*"
 marshmallow = "*"
 click = "*"
+python-dateutil = "*"
+aiohttp = "*"

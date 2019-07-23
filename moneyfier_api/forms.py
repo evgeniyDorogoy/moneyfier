@@ -2,6 +2,6 @@ from marshmallow import Schema, fields
 
 
 class MonobankStatementsParamsSchema(Schema):
-    account = fields.String(required=False)
-    date_from = fields.DateTime(required=False)
-    date_to = fields.DateTime(required=False)
+    account = fields.List(fields.String(), many=False, required=False)
+    date_from = fields.List(fields.DateTime(), many=False, required=False)
+    date_to = fields.List(fields.DateTime(), many=False, required=False)
