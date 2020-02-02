@@ -13,3 +13,4 @@ downloads/*
 __pycache__/
 tests/.pytest_cache/
 .venv
+.python-version
