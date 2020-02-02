@@ -1,5 +1,7 @@
 import itertools
 
+from marshmallow.exceptions import ValidationError
+from sanic.exceptions import abort
 from sanic.response import json
 from sanic.views import HTTPMethodView
 from sqlalchemy import select, func, desc
@@ -21,9 +23,10 @@ class UpdateDatabaseWithLastMonefyData(HTTPMethodView):
 
 class UpdateDatabaseWithLastMonobankData(HTTPMethodView):
     async def get(self, request):
-        params, errors = MonobankStatementsParamsSchema().load(dict(request.args))
-        if errors:
-            return json(errors)
+        try:
+            params = MonobankStatementsParamsSchema().load(dict(request.args))
+        except ValidationError:
+            return abort(403)
 
         headers = {'X-Token': request.headers.get('X-Token')}
 

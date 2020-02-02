@@ -1,9 +1,8 @@
-import json
-
-import aiohttp
 import os
 from collections import namedtuple
+from logging import getLogger
 
+import aiohttp
 import dropbox
 import requests
 
@@ -12,6 +11,7 @@ from transport.data_provider_exception import GetStatementException, MonobankDat
 
 dpc = DropBoxConfig()
 
+log = getLogger(__name__)
 
 class DataProviderBase:
     smoke_url = None
@@ -66,10 +66,12 @@ class MonobankDataProvider(DataProviderBase):
 
     async def get_statement(self, date_from, date_to, account, headers):
         url = f'{self.smoke_url}/personal/statement/{account}/{date_from}/{date_to}'
+        log.info(f'Start getting data from {self.__class__} with next URL {url}')
         async with aiohttp.ClientSession() as session:
             async with session.get(url=url, headers=headers) as response:
                 if response.status != requests.codes.ok:
+                    log.info(f'Response from {self.__class__} is: {response.status}, {response.reason}')
                     raise GetStatementException(
                         f'Statements for period from {date_from} to {date_to} for '
-                        f'{account} are unreachable now: code: {response.status} message: {response.text()}')
+                        f'{account} are unreachable now: code: {response.status} message: {response.reason}')
                 return await response.json()

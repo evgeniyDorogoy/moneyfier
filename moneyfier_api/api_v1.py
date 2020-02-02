@@ -9,9 +9,11 @@ app.add_route(DatabaseProcessor.as_view(), '/database-lifecycle')
 app.add_route(TableProcessor.as_view(), '/table-lifecycle')
 
 # data provider resources
+
 #Dropbox
 app.add_route(DropboxResources.as_view(), 'dropbox/get-data')
 app.add_route(UpdateDatabaseWithLastMonefyData.as_view(), 'dropbox/update-with-latest-data')
+
 #Monobank
 app.add_route(UpdateDatabaseWithLastMonobankData.as_view(), 'monobank/update-with-latest-data')
 
