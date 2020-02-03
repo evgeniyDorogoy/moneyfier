@@ -13,6 +13,7 @@ dpc = DropBoxConfig()
 
 log = getLogger(__name__)
 
+
 class DataProviderBase:
     smoke_url = None
 
@@ -73,5 +74,6 @@ class MonobankDataProvider(DataProviderBase):
                     log.info(f'Response from {self.__class__} is: {response.status}, {response.reason}')
                     raise GetStatementException(
                         f'Statements for period from {date_from} to {date_to} for '
-                        f'{account} are unreachable now: code: {response.status} message: {response.reason}')
+                        f'{account} are unreachable now: code: {response.status} message: {response.reason}'
+                    )
                 return await response.json()

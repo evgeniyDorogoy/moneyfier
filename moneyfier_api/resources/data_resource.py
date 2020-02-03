@@ -39,6 +39,7 @@ class UpdateDatabaseWithLastMonobankData(HTTPMethodView):
 
         return json({'total_number_of_inserted_values': len(values_for_insert)})
 
+
 class GetAllRecords(HTTPMethodView):
     async def get(self, request):
         engine = await asynchronic_engine()

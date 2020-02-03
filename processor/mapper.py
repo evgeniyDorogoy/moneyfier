@@ -32,7 +32,6 @@ class MonefyStatementMapper:
 
 
 class MonobankStatementsMapper:
-
     def __init__(self, statements, account):
         self.statements = statements
         self.account = account
