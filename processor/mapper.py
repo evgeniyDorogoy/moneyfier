@@ -1,9 +1,12 @@
+import json
 from datetime import datetime
+
+import os
 
 from processor.parser import ExportFileParser
 
 
-class CSVToDBMapper:
+class MonefyStatementMapper:
     def execute(self) -> list:
         data = ExportFileParser().parse()
         return self.map(data)
@@ -26,3 +29,42 @@ class CSVToDBMapper:
             }
             accumulator.append(result)
         return accumulator
+
+
+class MonobankStatementsMapper:
+    def __init__(self, statements, account):
+        self.statements = statements
+        self.account = account
+
+    def execute(self) -> list:
+        return self.map()
+
+    def map(self) -> list:
+        accumulator = []
+        mcc_map_results = self._mcc_mapper()
+        for el in self.statements:
+            result = {
+                'transaction_date': datetime.fromtimestamp(el.get('time')).date(),
+                'account': self.account,
+                'category': self._cathegory_mapper(el, mcc_map_results),
+                'amount': float(abs(el.get('amount'))) / 100,
+                'currency': el.get('currencyCode'),
+                'converted_amount': float(abs(el.get('amount'))) / 100,
+                'converted_currency': el.get('currencyCode'),
+                'description': el.get('description'),
+                'is_debet': float(el.get('amount')) / 100 > 0,
+            }
+            accumulator.append(result)
+        return accumulator
+
+    def _mcc_mapper(self):
+        path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static/mcc_codes.json')
+        with open(path) as outfile:
+            return json.load(outfile)
+
+    @staticmethod
+    def _cathegory_mapper(el, mcc_map_results):
+        result = [i.get('irs_description') for i in mcc_map_results if int(i.get('mcc')) == el.get('mcc')]
+        if not result:
+            return el.get('mcc')
+        return result[0]

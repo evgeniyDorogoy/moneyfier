@@ -1,20 +1,25 @@
 import os
+from collections import namedtuple
+from logging import getLogger
+
+import aiohttp
 import dropbox
 import requests
-from collections import namedtuple
 
 from config import DropBoxConfig
+from transport.data_provider_exception import GetStatementException, MonobankDataProviderException
 
 dpc = DropBoxConfig()
 
+log = getLogger(__name__)
+
 
 class DataProviderBase:
-
     smoke_url = None
 
     @staticmethod
-    def make_get_request(url) -> requests.models.Response:
-        r = requests.get(url)
+    def make_get_request(url, headers=None) -> requests.models.Response:
+        r = requests.get(url, headers=headers if headers else {})
         r.raise_for_status()
         return r
 
@@ -29,7 +34,6 @@ class DataProviderBase:
 
 
 class DropBoxDataProvider(DataProviderBase):
-
     smoke_url = 'https://dropbox.com'
 
     def __init__(self):
@@ -51,3 +55,25 @@ class DropBoxDataProvider(DataProviderBase):
             self.dbx.files_download_to_file(os.path.join(dpc.destination_folder, file.filename), file.filepatch)
             result_count += 1
         return result_count
+
+
+class MonobankDataProvider(DataProviderBase):
+    smoke_url = 'https://api.monobank.ua'
+
+    def api_smoke(self):
+        result = self.make_get_request(url=self.smoke_url)
+        if result.status_code != requests.codes.ok:
+            raise MonobankDataProviderException('Monobank API is unreachable')
+
+    async def get_statement(self, date_from, date_to, account, headers):
+        url = f'{self.smoke_url}/personal/statement/{account}/{date_from}/{date_to}'
+        log.info(f'Start getting data from {self.__class__} with next URL {url}')
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url=url, headers=headers) as response:
+                if response.status != requests.codes.ok:
+                    log.info(f'Response from {self.__class__} is: {response.status}, {response.reason}')
+                    raise GetStatementException(
+                        f'Statements for period from {date_from} to {date_to} for '
+                        f'{account} are unreachable now: code: {response.status} message: {response.reason}'
+                    )
+                return await response.json()

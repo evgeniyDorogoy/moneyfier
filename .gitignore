@@ -7,6 +7,7 @@ run_ci.sh
 execute.py
 polygon.py
 downloads/*
+.env
 
 #Other entities
 __pycache__/

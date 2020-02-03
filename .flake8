@@ -1,0 +1,31 @@
+[flake8]
+max-line-length=120
+exclude=
+    pip-download-cache,
+    .svn,
+    CVS,
+    .bzr,
+    .hg,
+    .git,
+    __pycache__,
+    .tox,
+    .eggs,
+    *.egg,
+    tests,
+    downloads,
+    .venv,
+    venv,
+    .pytest_cache,
+    static
+
+ignore=
+    E121,
+    E123,
+    E126,
+    E226,
+    E24,
+    E501,
+    E704,
+    W503,
+    W504
+import-order-style = pep8
