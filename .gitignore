@@ -12,5 +12,6 @@ downloads/*
 #Other entities
 __pycache__/
 tests/.pytest_cache/
+venv
 .venv
 .python-version

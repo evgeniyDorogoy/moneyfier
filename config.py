@@ -60,7 +60,7 @@ class TelegramConfig:
 class DatabaseConfig:
     def __init__(self):
         self.db_host = os.environ.get('DB_HOST', 'localhost')
-        self.db_port = os.environ.get('DB_PORT', '5423')
+        self.db_port = os.environ.get('DB_PORT', '5432')
         self.db_user = os.environ.get('DB_USER')
         self.db_password = os.environ.get('DB_PASSWORD')
         self.db_name = os.environ.get('DB_NAME', 'postgres')
