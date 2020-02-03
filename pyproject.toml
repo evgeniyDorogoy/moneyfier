@@ -1,0 +1,33 @@
+[tool.black]
+line-length = 120
+target-version = ['py37']
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.venv
+    | \.pytest_cache
+    | _build
+    | buck-out
+    | build
+    | dist
+    | downloads
+  )/
+  | .dockerignore
+  | .env.dev
+  | .envrc
+  | .flake8
+  | .gitignore
+  | .python-version
+  | .travis.yml
+  | Dockerfile
+  | Pipfile
+  | Pipfile.lock
+  | supervisord.conf
+  | README.md
+)
+'''
