@@ -1,6 +1,7 @@
 import itertools
 
 from marshmallow.exceptions import ValidationError
+from sanic import response
 from sanic.exceptions import abort
 from sanic.response import json
 from sanic.views import HTTPMethodView
@@ -27,17 +28,11 @@ class UpdateDatabaseWithLastMonobankData(HTTPMethodView):
             params = MonobankStatementsParamsSchema().load(dict(request.args))
         except ValidationError:
             return abort(403)
-
         headers = {'X-Token': request.headers.get('X-Token')}
-
-        res = await Monobank(params, headers).get_statements_for_period()
-        merged_results = list(itertools.chain.from_iterable(res))
-        values_for_insert = MonobankStatementsMapper(merged_results, 0).execute()
-
-        with synchronic_engine().connect() as conn:
-            conn.execute(Transactions.__table__.insert().values(values_for_insert))
-
-        return json({'total_number_of_inserted_values': len(values_for_insert)})
+        if not headers:
+            return abort(422, 'You need to provide mandatory header: X-Token')
+        await Monobank(params, headers).update_statements_for_period()
+        return response.text('Statements updating process for Monobank data provider has been started')
 
 
 class GetAllRecords(HTTPMethodView):
