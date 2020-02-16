@@ -1,5 +1,3 @@
-import itertools
-
 from marshmallow.exceptions import ValidationError
 from sanic import response
 from sanic.exceptions import abort
@@ -10,7 +8,7 @@ from sqlalchemy import select, func, desc
 from database.helper import synchronic_engine, asynchronic_engine
 from database.models import Transactions
 from moneyfier_api.forms import MonobankStatementsParamsSchema
-from processor.mapper import MonefyStatementMapper, MonobankStatementsMapper
+from processor.mapper import MonefyStatementMapper
 from services.monobank_service import Monobank
 
 

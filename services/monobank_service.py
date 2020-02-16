@@ -52,4 +52,5 @@ class Monobank:
             date_from=int(dt_range[0].timestamp()),
             date_to=int(dt_range[1].timestamp()),
             account=self.account,
-            headers=self.headers)
+            headers=self.headers,
+        )
