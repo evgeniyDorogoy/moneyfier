@@ -1,5 +1,6 @@
-FROM python:3.7-alpine
-
+FROM python:3.7-alpine as dev
+COPY ./requirements.txt /usr/src/moneyfier/
+WORKDIR /usr/src/moneyfier/
 RUN apk update \
     && apk add --virtual build-dependencies \
         build-base \
@@ -11,23 +12,14 @@ RUN apk update \
         openssl-dev \
         libffi-dev \
     && apk add --no-cache postgresql-libs \
-    && apk add \
-        bash
-
-WORKDIR /usr/src/moneyfier
-
-COPY . /usr/src/moneyfier
-
-
-RUN set -xe \
-    && pip install pipenv \
-    && pipenv --python 3.7 \
-    && pipenv install --skip-lock \
+    && apk add bash \
+    && apk add supervisor\
+    && set -xe \
+    && pip install -r requirements.txt \
     && apk del build-dependencies \
     && rm -rf /var/cache/apk/*
-
-RUN mkdir downloads
-
 EXPOSE 8000
+CMD ["supervisord", "-c", "supervisord.conf"]
 
-CMD ["pipenv", "run", "python3", "manage.py", "-s"]
+FROM dev as prod
+COPY . /usr/src/moneyfier/

@@ -5,7 +5,7 @@ from bots.telegram_bots import main
 
 
 def run_server():
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=8000)
 
 
 def run_bot():
