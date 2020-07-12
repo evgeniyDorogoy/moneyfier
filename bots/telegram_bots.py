@@ -12,6 +12,7 @@ logger.setLevel(logging.DEBUG)
 
 PERIOD = 'period'
 CATEGORY = 'category'
+START = 'start'
 
 
 def start(bot, update):
@@ -46,6 +47,7 @@ def main():
     updater = Updater(tc.bot_token)
     dp = updater.dispatcher
 
+    dp.add_handler(CommandHandler(START, start))
     dp.add_handler(CommandHandler(PERIOD, period))
     dp.add_handler(CommandHandler(CATEGORY, category))
 

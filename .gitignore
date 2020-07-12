@@ -9,9 +9,11 @@ polygon.py
 downloads/*
 .env
 
+
 #Other entities
 __pycache__/
 tests/.pytest_cache/
-venv
+venv/
+supervisord.log
 .venv
 .python-version

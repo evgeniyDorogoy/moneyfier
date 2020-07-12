@@ -12,7 +12,9 @@
    installing dependencies from **Pipfile**;
 
 ## Run in docker:
-   1. `mv .env.dev .env`
-   2. Edit environment variables in `.env`
-   3. Build image `docker build -t moneyfier .`
-   4. Run `docker run --name moneyfier -d -p 8000:8000 --env-file .env moneyfier`
+   1. Execute `mv .env.dev .env`;
+   2. Edit environment variables in `.env`;
+   3. Build `docker build --target dev -t moneyfier .` for DEV image or `docker build -t moneyfier .` for PROD one;
+   4. Run `docker run --name moneyfier -d -p 8000:8000 --mount type=bind,source="$(pwd)",target=/usr/src/moneyfier 
+   --env-file .env moneyfier` in case of running container in DEV mode, otherwise use `docker run --name moneyfier -d 
+   -p 8000:8000 --env-file .env moneyfier` for the PROD one;

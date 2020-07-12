@@ -1,29 +1,31 @@
 import inspect
-
 import sys
-
-
-from database import models
-from config import DatabaseConfig
 from collections import namedtuple
+from logging import getLogger
 from typing import Any, TypeVar
+
+from config import DatabaseConfig
+from database import models
+
+log = getLogger(__name__)
 
 
 def make_db_url(db_name: str) -> str:
     db_conf = DatabaseConfig()
     if db_name:
         db_conf.database_name = db_name
-    return 'postgresql://{db_user}:{db_password}@{db_host}/{db_name}'.format(
+    db_url = 'postgresql://{db_user}:{db_password}@{db_host}/{db_name}'.format(
         db_user=db_conf.database_user,
         db_password=db_conf.database_password,
         db_host=db_conf.db_host,
         db_name=db_conf.database_name,
     )
+    log.debug(f'Composed database url is: {db_url}')
+    return db_url
 
 
 async def asynchronic_engine(db_name: str = None) -> Any:
     from aiopg.sa import create_engine
-
     return await create_engine(make_db_url(db_name))
 
 
